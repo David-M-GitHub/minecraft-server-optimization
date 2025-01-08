@@ -2,7 +2,7 @@
 
 Note for users that are on vanilla, Fabric or Spigot (or anything below Paper) - go to your server.properties and change `sync-chunk-writes` to `false`. This option is forcibly set to false on Paper and its forks, but on other server implementations you need to switch this to false manually. This allows the server to save chunks off the main thread, lessening the load on the main tick loop.
 
-Guide for version 1.20. Some things may still apply to 1.15 - 1.19.
+Guide for version 1.21. Some things may still apply to 1.15 - 1.20.
 
 Based on [this guide](https://www.spigotmc.org/threads/guide-server-optimization%E2%9A%A1.283181/) and other sources (all of them are linked throughout the guide when relevant).
 
@@ -114,6 +114,7 @@ Good starting values:
 
     area_effect_cloud: 8
     arrow: 16
+    breeze_wind_charge: 8
     dragon_fireball: 3
     egg: 8
     ender_pearl: 8
@@ -129,6 +130,7 @@ Good starting values:
     snowball: 8
     spectral_arrow: 16
     trident: 16
+    wind_charge: 8
     wither_skull: 4
 ```
 
@@ -383,6 +385,17 @@ This option can disable portal usage of all entities besides the player. This pr
 
 Lobotomized villagers are stripped from their AI and only restock their offers every so often. Enabling this will lobotomize villagers that are unable to pathfind to their destination. Freeing them should unlobotomize them.
 
+#### villager.search-radius
+
+```
+Good starting values:
+
+          acquire-poi: 16
+          nearest-bed-sensor: 16
+```
+
+Radius within which villagers will search for job site blocks and beds. This significantly boosts performance with large amount of villagers, but will prevent them from detecting job site blocks or beds that are further away than set value.
+
 ---
 
 ## Misc
@@ -398,7 +411,7 @@ Good starting values:
       exp: 4.0
 ```
 
-This decides the distance between the items and exp orbs to be merged, reducing the amount of items ticking on the ground. Setting this too high will lead to the illusion of items or exp orbs disappearing as they merge together. Setting this too high will break some farms, as well as allow items to teleport through blocks. There are no checks done to prevent items from merging through walls. Exp is only merged on creation.
+This decides the distance between the items and exp orbs to be merged, reducing the amount of items ticking on the ground. Setting this too high will lead to the illusion of items or exp orbs disappearing as they merge together. Setting this too high will break some farms, as well as allow items to teleport through blocks. There are no checks done to prevent items from merging through walls (unless Paper's `fix-items-merging-through-walls` setting is activated). Exp is only merged on creation.
 
 #### hopper-transfer
 
@@ -427,7 +440,7 @@ Good starting values:
         red_sand: 300
         gravel: 300
         dirt: 300
-        grass: 300
+        short_grass: 300
         pumpkin: 300
         melon_slice: 300
         kelp: 300
@@ -442,6 +455,7 @@ Good starting values:
         acacia_leaves: 300
         dark_oak_leaves: 300
         mangrove_leaves: 300
+        cherry_leaves: 300
         cactus: 300
         diorite: 300
         granite: 300
@@ -566,7 +580,7 @@ If this option is greater that `0`, players above the set y level will be damage
 ---
 
 # Java startup flags
-[Vanilla Minecraft and Minecraft server software in version 1.19 requires Java 17 or higher](https://docs.papermc.io/java-install-update). Oracle has changed their licensing, and there is no longer a compelling reason to get your java from them. Recommended vendors are [Adoptium](https://adoptium.net/) and [Amazon Corretto](https://aws.amazon.com/corretto/). Alternative JVM implementations such as OpenJ9 or GraalVM can work, however they are not supported by Paper and have been known to cause issues, therefore they are not currently recommended.
+[Vanilla Minecraft and Minecraft server software in version 1.20.5+ requires Java 21 or higher](https://docs.papermc.io/java-install-update). Oracle has changed their licensing, and there is no longer a compelling reason to get your java from them. Recommended vendors are [Adoptium](https://adoptium.net/) and [Amazon Corretto](https://aws.amazon.com/corretto/). Alternative JVM implementations such as OpenJ9 or GraalVM can work, however they are not supported by Paper and have been known to cause issues, therefore they are not currently recommended.
 
 Your garbage collector can be configured to reduce lag spikes caused by big garbage collector tasks. You can find startup flags optimized for Minecraft servers [here](https://docs.papermc.io/paper/aikars-flags) [`SOG`]. Keep in mind that this recommendation will not work on alternative JVM implementations.
 It's recommended to use the [flags.sh](https://flags.sh) startup flags generator to get the correct startup flags for your server
@@ -600,11 +614,10 @@ To get Timings of your server, you just need to execute the `/timings paste` com
 ---
 
 [`SOG`]: https://www.spigotmc.org/threads/guide-server-optimization%E2%9A%A1.283181/
-[server.properties]: https://minecraft.wiki/w/Server.properties
-[bukkit.yml]: https://bukkit.fandom.com/wiki/Bukkit.yml
-[spigot.yml]: https://www.spigotmc.org/wiki/spigot-configuration/
+[server.properties]: https://docs.papermc.io/paper/reference/server-properties
+[bukkit.yml]: https://docs.papermc.io/paper/reference/bukkit-configuration
+[spigot.yml]: https://docs.papermc.io/paper/reference/spigot-configuration
 [paper-global configuration]: https://docs.papermc.io/paper/reference/global-configuration
 [paper-world configuration]: https://docs.papermc.io/paper/reference/world-configuration
 [purpur.yml]: https://purpurmc.org/docs/Configuration/
 [pufferfish.yml]: https://docs.pufferfish.host/setup/pufferfish-fork-configuration/
-[Petal]: https://github.com/Bloom-host/Petal
